@@ -14,7 +14,7 @@ const sampleWords: Word[] = [
       "Finding my dream job while helping a friend with their resume was pure serendipity",
       "The serendipitous discovery of penicillin changed medical history"
     ],
-    image: "https://images.unsplash.com/photo-1501286353178-1ec881214838"
+    image: "https://images.unsplash.com/photo-1533227268428-f9ed0900fb3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80"
   },
   {
     id: "2",
@@ -24,7 +24,7 @@ const sampleWords: Word[] = [
       "The ephemeral beauty of a rainbow after the storm",
       "Social media posts are often ephemeral, disappearing after 24 hours"
     ],
-    image: "https://images.unsplash.com/photo-1517022812141-23620dba5c23"
+    image: "https://images.unsplash.com/photo-1568127335414-de4b3363e13e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
   },
   {
     id: "3",
@@ -34,7 +34,7 @@ const sampleWords: Word[] = [
       "The luminescent jellyfish glowed in the dark ocean depths",
       "The northern lights created a luminescent display in the night sky"
     ],
-    image: "https://images.unsplash.com/photo-1472396961693-142e6e269027"
+    image: "https://images.unsplash.com/photo-1483347756197-71ef80e95f73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
   }
 ];
 
