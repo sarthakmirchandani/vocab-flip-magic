@@ -17,18 +17,7 @@ const Index = () => {
     NotificationService.initialize().catch(err => {
       console.error("Failed to initialize notifications:", err);
     });
-
-    // Simulate daily notification
-    const timer = setTimeout(() => {
-      toast({
-        title: "Word of the Day",
-        description: "Learn 'Analyze' - tap to explore its meaning!",
-        duration: 5000,
-      });
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [toast]);
+  }, []);
 
   const handleLevelChange = (level: string) => {
     setCurrentLevel(level);
