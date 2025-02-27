@@ -33,7 +33,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow-sm">
         <div className="container py-6">
-          <h1 className="text-3xl font-bold text-gray-800">Vocab Flip Magic</h1>
+          <h1 className="text-3xl font-bold text-gray-800">WordPill!</h1>
           <p className="text-gray-600 mt-2">Expand your vocabulary with interactive flashcards</p>
           
           <div className="flex gap-2 mt-4">
