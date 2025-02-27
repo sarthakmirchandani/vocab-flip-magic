@@ -15,11 +15,11 @@ export class WordNotificationService {
       // Schedule a notification with this word
       await NotificationService.scheduleLocalNotification(
         'Word of the Day',
-        `Learn "${wordOfTheDay.term}" - ${wordOfTheDay.definition.substring(0, 50)}...`,
+        `Learn "${wordOfTheDay.word}" - ${wordOfTheDay.definition.substring(0, 50)}...`,
         `daily-word-${Date.now()}`
       );
       
-      console.log(`Scheduled word of the day notification: ${wordOfTheDay.term}`);
+      console.log(`Scheduled word of the day notification: ${wordOfTheDay.word}`);
       return wordOfTheDay;
     } catch (error) {
       console.error('Error sending daily word notification:', error);
