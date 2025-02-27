@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Word } from "@/components/Flashcard";
 import { Button } from "@/components/ui/button";
 import { getWordsByLevel } from "@/data/academicWords";
+import { NotificationService } from "@/services/NotificationService";
 
 const Index = () => {
   const { toast } = useToast();
@@ -12,6 +13,11 @@ const Index = () => {
   const [displayedWords, setDisplayedWords] = useState<Word[]>(getWordsByLevel("beginner"));
 
   useEffect(() => {
+    // Initialize push notifications
+    NotificationService.initialize().catch(err => {
+      console.error("Failed to initialize notifications:", err);
+    });
+
     // Simulate daily notification
     const timer = setTimeout(() => {
       toast({
