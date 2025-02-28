@@ -23,7 +23,7 @@ export const Flashcard = ({ word }: FlashcardProps) => {
 
   return (
     <div
-      className="w-full max-w-md aspect-[3/4] perspective-1000 cursor-pointer mx-auto"
+      className="w-full max-w-md perspective-1000 cursor-pointer mx-auto"
       onClick={handleFlip}
     >
       <div
@@ -38,12 +38,12 @@ export const Flashcard = ({ word }: FlashcardProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 backface-hidden bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center gap-4 overflow-y-auto"
+              className="backface-hidden bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center gap-4"
             >
               <span className="text-sm font-medium text-primary/80">tap to flip</span>
               <h2 className="text-3xl font-bold text-gray-800 mb-4">{word.word}</h2>
-              <p className="text-lg text-gray-600 text-center mb-4 line-clamp-3 hover:line-clamp-none">{word.definition}</p>
-              <div className="space-y-2 w-full overflow-y-auto max-h-[40%]">
+              <p className="text-lg text-gray-600 text-center mb-4">{word.definition}</p>
+              <div className="space-y-2 w-full">
                 {word.examples.map((example, idx) => (
                   <p
                     key={idx}

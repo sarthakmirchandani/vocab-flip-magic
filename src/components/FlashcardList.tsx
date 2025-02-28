@@ -11,7 +11,7 @@ export const FlashcardList = ({ words }: FlashcardListProps) => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="container py-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+      className="container py-8 grid gap-12 md:grid-cols-2 lg:grid-cols-3"
     >
       {words.map((word) => (
         <motion.div
