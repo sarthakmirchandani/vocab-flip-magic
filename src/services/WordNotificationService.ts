@@ -13,10 +13,14 @@ export class WordNotificationService {
       const wordOfTheDay = beginnerWords[randomIndex];
       
       // Schedule a notification with this word
-      await NotificationService.scheduleLocalNotification(
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(9, 0, 0, 0); // 9:00 AM
+
+      await NotificationService.scheduleNotification(
         'Word of the Day',
         `Learn "${wordOfTheDay.word}" - ${wordOfTheDay.definition.substring(0, 50)}...`,
-        `daily-word-${Date.now()}`
+        tomorrow
       );
       
       console.log(`Scheduled word of the day notification: ${wordOfTheDay.word}`);
