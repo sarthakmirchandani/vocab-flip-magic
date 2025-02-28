@@ -2,7 +2,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.055f41f609a54201a3e39d3c2c6c7423',
+  appId: 'com.vocabflip.app',
   appName: 'vocab-flip-magic',
   webDir: 'dist',
   server: {
