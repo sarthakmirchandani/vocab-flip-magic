@@ -1,3 +1,4 @@
+
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
@@ -7,8 +8,7 @@ const config: CapacitorConfig = {
   server: {
     url: 'https://055f41f6-09a5-4201-a3e3-9d3c2c6c7423.lovableproject.com',
     cleartext: true,
-    androidScheme: 'https',
-
+    androidScheme: 'https'
   },
   plugins: {
     PushNotifications: {
@@ -18,7 +18,7 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true
   },
-webViewAllowFileAccessFromFileURLs: true,
+  webViewAllowFileAccessFromFileURLs: true,
   overrideUserAgent: 'Mozilla/5.0 CapacitorApp'
 };
 
