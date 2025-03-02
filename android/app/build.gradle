@@ -4,7 +4,7 @@ apply plugin: 'com.google.gms.google-services' // Firebase services
 
 android {
     namespace "com.vocabflip.app"
-    compileSdk 34 // Updated to a valid SDK version
+    compileSdk 34 // Keep this at 34 as it's the maximum recommended for Gradle plugin 8.2.2
 
     defaultConfig {
         applicationId "com.vocabflip.app"
@@ -49,6 +49,7 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.1"
 
     // Using compatible versions of core and core-ktx
+    // Downgrade these dependencies to versions compatible with SDK 34
     implementation "androidx.core:core:1.12.0"
     implementation "androidx.core:core-ktx:1.12.0"
 
@@ -74,11 +75,19 @@ dependencies {
 
         resolutionStrategy {
             force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+            // Force core and core-ktx to versions compatible with SDK 34
+            force "androidx.core:core:1.12.0"
+            force "androidx.core:core-ktx:1.12.0"
 
             // Force all Kotlin dependencies to use the same version
             eachDependency { details ->
                 if (details.requested.group == "org.jetbrains.kotlin") {
                     details.useVersion "1.8.22"
+                }
+                // Force specific versions for androidx.core components
+                if (details.requested.group == "androidx.core" && 
+                   (details.requested.name == "core" || details.requested.name == "core-ktx")) {
+                    details.useVersion "1.12.0"
                 }
             }
         }
