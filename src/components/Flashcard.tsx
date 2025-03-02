@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface Word {
@@ -19,7 +19,32 @@ export const Flashcard = ({ word }: FlashcardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
+  useEffect(() => {
+    // Log component mounting for debugging in Capacitor
+    console.log("Flashcard component mounted with word:", word.word);
+    
+    // Prefetch the image to check if it's accessible
+    const img = new Image();
+    img.src = word.image;
+    img.onload = () => {
+      console.log(`Image for ${word.word} loaded successfully`);
+      setImageLoaded(true);
+      setImageError(false);
+    };
+    img.onerror = (e) => {
+      console.error(`Error loading image for ${word.word}:`, e);
+      setImageError(true);
+    };
+
+    return () => {
+      // Clean up
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [word]);
+
   const handleFlip = () => {
+    console.log(`Flipping card for: ${word.word}`);
     setIsFlipped(!isFlipped);
   };
 
@@ -56,23 +81,19 @@ export const Flashcard = ({ word }: FlashcardProps) => {
           
           {/* Back of card */}
           <div className="absolute w-full h-full backface-hidden bg-white rounded-xl shadow-lg rotate-y-180 overflow-hidden">
-            {/* Hidden image for preloading */}
-            <img 
-              src={word.image}
-              alt=""
-              className="hidden"
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageError(true)}
-            />
-            
-            {/* Visible image */}
+            {/* Only render the visible image */}
             <img
               src={imageError ? fallbackImage : word.image}
               alt={word.word}
               className="w-full h-full object-cover"
+              onLoad={() => {
+                console.log(`Visible image for ${word.word} loaded successfully`);
+                setImageLoaded(true);
+              }}
               onError={(e) => {
-                console.log("Image failed to load:", word.image);
+                console.error(`Error loading visible image for ${word.word}`);
                 e.currentTarget.src = fallbackImage;
+                setImageError(true);
               }}
             />
             

@@ -16,7 +16,9 @@ const config: CapacitorConfig = {
     }
   },
   android: {
-    allowMixedContent: true
+    allowMixedContent: true,
+    captureInput: true,
+    webContentsDebuggingEnabled: true
   },
   webViewAllowFileAccessFromFileURLs: true,
   overrideUserAgent: 'Mozilla/5.0 CapacitorApp'
