@@ -20,6 +20,12 @@ const config: CapacitorConfig = {
     captureInput: true,
     webContentsDebuggingEnabled: true
   },
+  ios: {
+    contentInset: "always",
+    allowsLinkPreview: true,
+    scrollEnabled: true,
+    useOldRenderingEngine: false
+  },
   webViewAllowFileAccessFromFileURLs: true,
   overrideUserAgent: 'Mozilla/5.0 CapacitorApp'
 };

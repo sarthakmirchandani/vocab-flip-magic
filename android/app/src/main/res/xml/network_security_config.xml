@@ -12,5 +12,6 @@
         <domain includeSubdomains="true">055f41f6-09a5-4201-a3e3-9d3c2c6c7423.lovableproject.com</domain>
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
     </domain-config>
 </network-security-config>

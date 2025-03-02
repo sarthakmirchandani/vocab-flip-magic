@@ -16,8 +16,22 @@ const Index = () => {
     // Initialize push notifications
     NotificationService.initialize().catch(err => {
       console.error("Failed to initialize notifications:", err);
+      // Don't show toast in web environment for this expected error
+      if (err.code !== "UNIMPLEMENTED") {
+        toast({
+          title: "Notification Error",
+          description: "Failed to initialize notifications",
+          variant: "destructive",
+        });
+      }
     });
-  }, []);
+
+    // Show welcome toast when app loads
+    toast({
+      title: "Welcome to WordPill!",
+      description: "Tap on cards to flip them and learn new words",
+    });
+  }, [toast]);
 
   const handleLevelChange = (level: string) => {
     setCurrentLevel(level);
