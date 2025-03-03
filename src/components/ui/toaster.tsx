@@ -8,9 +8,29 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
+import { useEffect, useRef } from "react"
 
 export function Toaster() {
   const { toasts } = useToast()
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    audioRef.current = new Audio("/notification-sound.mp3")
+    return () => {
+      if (audioRef.current) {
+        audioRef.current = null
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    // Play sound when a new toast appears
+    if (toasts.length > 0 && audioRef.current) {
+      audioRef.current.play().catch(err => {
+        console.log("Error playing notification sound:", err)
+      })
+    }
+  }, [toasts.length])
 
   return (
     <ToastProvider>
