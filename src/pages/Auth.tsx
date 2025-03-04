@@ -50,7 +50,6 @@ export const SignInPage = () => {
           path="/sign-in" 
           signUpUrl="/sign-up"
           afterSignInUrl="/"
-          signInUrl="/sign-in"
           appearance={{
             elements: {
               formButtonPrimary: 

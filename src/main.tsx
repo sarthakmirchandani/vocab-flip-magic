@@ -9,10 +9,7 @@ const publishableKey = "pk_test_d29ydGh5LWNhcmlib3UtNzIuY2xlcmsuYWNjb3VudHMuZGV2
 
 // Render the app with ClerkProvider
 createRoot(document.getElementById("root")!).render(
-  <ClerkProvider 
-    publishableKey={publishableKey}
-    navigationFallback={<div>Loading...</div>}
-  >
+  <ClerkProvider publishableKey={publishableKey}>
     <App />
   </ClerkProvider>
 );
