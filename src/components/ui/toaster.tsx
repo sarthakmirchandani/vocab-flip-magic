@@ -15,7 +15,12 @@ export function Toaster() {
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
-    audioRef.current = new Audio("/notification-sound.mp3")
+    try {
+      audioRef.current = new Audio("/notification-sound.mp3")
+    } catch (err) {
+      console.error("Error initializing audio:", err)
+    }
+    
     return () => {
       if (audioRef.current) {
         audioRef.current = null
@@ -26,9 +31,14 @@ export function Toaster() {
   useEffect(() => {
     // Play sound when a new toast appears
     if (toasts.length > 0 && audioRef.current) {
-      audioRef.current.play().catch(err => {
-        console.log("Error playing notification sound:", err)
-      })
+      const playPromise = audioRef.current.play()
+      
+      // Handle play promise to avoid uncaught promise rejection
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.log("Error playing notification sound:", err)
+        })
+      }
     }
   }, [toasts.length])
 
