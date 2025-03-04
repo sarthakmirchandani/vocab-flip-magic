@@ -9,6 +9,7 @@ export const SignInPage = () => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
   const [authError, setAuthError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
   useEffect(() => {
     // Redirect to home if already signed in
@@ -21,7 +22,13 @@ export const SignInPage = () => {
     const error = urlParams.get("error");
     if (error) {
       setAuthError(decodeURIComponent(error));
+      console.error("Auth error from URL:", error);
     }
+
+    // Log hostname for debugging OAuth redirects
+    const hostname = window.location.origin;
+    setDebugInfo(`Current origin: ${hostname}`);
+    console.log("Auth page loaded with origin:", hostname);
   }, [isSignedIn, navigate]);
 
   // Handle authentication errors from Clerk
@@ -45,11 +52,19 @@ export const SignInPage = () => {
           </Alert>
         )}
 
+        {debugInfo && process.env.NODE_ENV === 'development' && (
+          <div className="text-xs text-gray-500 mb-4">
+            <p>{debugInfo}</p>
+            <p>Make sure this origin is added as an authorized redirect URI in your OAuth providers.</p>
+          </div>
+        )}
+
         <SignIn 
           routing="path" 
           path="/sign-in" 
           signUpUrl="/sign-up"
           afterSignInUrl="/"
+          redirectUrl={window.location.origin + "/sign-in/callback"}
           appearance={{
             elements: {
               formButtonPrimary: 
@@ -69,6 +84,7 @@ export const SignUpPage = () => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
   const [authError, setAuthError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
   useEffect(() => {
     // Redirect to home if already signed in
@@ -81,7 +97,13 @@ export const SignUpPage = () => {
     const error = urlParams.get("error");
     if (error) {
       setAuthError(decodeURIComponent(error));
+      console.error("Auth error from URL:", error);
     }
+
+    // Log hostname for debugging OAuth redirects
+    const hostname = window.location.origin;
+    setDebugInfo(`Current origin: ${hostname}`);
+    console.log("Auth page loaded with origin:", hostname);
   }, [isSignedIn, navigate]);
 
   return (
@@ -99,11 +121,19 @@ export const SignUpPage = () => {
           </Alert>
         )}
 
+        {debugInfo && process.env.NODE_ENV === 'development' && (
+          <div className="text-xs text-gray-500 mb-4">
+            <p>{debugInfo}</p>
+            <p>Make sure this origin is added as an authorized redirect URI in your OAuth providers.</p>
+          </div>
+        )}
+
         <SignUp 
           routing="path" 
           path="/sign-up" 
           signInUrl="/sign-in"
           afterSignUpUrl="/"
+          redirectUrl={window.location.origin + "/sign-up/callback"}
           appearance={{
             elements: {
               formButtonPrimary: 
