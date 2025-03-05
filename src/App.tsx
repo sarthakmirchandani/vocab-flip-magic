@@ -37,9 +37,9 @@ const App = () => (
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
           
-          {/* OAuth callback routes - important for handling the redirect */}
+          {/* OAuth callback routes */}
           <Route path="/sign-in/callback/*" element={<SignInPage />} />
-          <Route path="/sign-up/callback/*" element={<SignInPage />} />
+          <Route path="/sign-up/callback/*" element={<SignUpPage />} /> {/* Fixed to use SignUpPage */}
           
           {/* 404 route */}
           <Route path="*" element={<NotFound />} />

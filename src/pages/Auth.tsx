@@ -1,13 +1,14 @@
 
 import { SignIn, SignUp, useAuth } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 export const SignInPage = () => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [authError, setAuthError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
@@ -15,6 +16,7 @@ export const SignInPage = () => {
     // Redirect to home if already signed in
     if (isSignedIn) {
       navigate("/");
+      return;
     }
 
     // Check for error query param in URL
@@ -25,11 +27,12 @@ export const SignInPage = () => {
       console.error("Auth error from URL:", error);
     }
 
-    // Log hostname for debugging OAuth redirects
+    // Log hostname and path for debugging OAuth redirects
     const hostname = window.location.origin;
-    setDebugInfo(`Current origin: ${hostname}`);
-    console.log("Auth page loaded with origin:", hostname);
-  }, [isSignedIn, navigate]);
+    const path = location.pathname;
+    setDebugInfo(`Current origin: ${hostname}, Path: ${path}`);
+    console.log("Auth page loaded with origin:", hostname, "Path:", path);
+  }, [isSignedIn, navigate, location.pathname]);
 
   // Handle authentication errors from Clerk
   const handleSignInError = (err: Error) => {
@@ -83,6 +86,7 @@ export const SignInPage = () => {
 export const SignUpPage = () => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [authError, setAuthError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
@@ -90,6 +94,7 @@ export const SignUpPage = () => {
     // Redirect to home if already signed in
     if (isSignedIn) {
       navigate("/");
+      return;
     }
 
     // Check for error query param
@@ -100,11 +105,12 @@ export const SignUpPage = () => {
       console.error("Auth error from URL:", error);
     }
 
-    // Log hostname for debugging OAuth redirects
+    // Log hostname and path for debugging OAuth redirects
     const hostname = window.location.origin;
-    setDebugInfo(`Current origin: ${hostname}`);
-    console.log("Auth page loaded with origin:", hostname);
-  }, [isSignedIn, navigate]);
+    const path = location.pathname;
+    setDebugInfo(`Current origin: ${hostname}, Path: ${path}`);
+    console.log("Auth page loaded with origin:", hostname, "Path:", path);
+  }, [isSignedIn, navigate, location.pathname]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
