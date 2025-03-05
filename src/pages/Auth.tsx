@@ -64,7 +64,7 @@ export const SignInPage = () => {
           path="/sign-in" 
           signUpUrl="/sign-up"
           afterSignInUrl="/"
-          redirectUrl={window.location.origin + "/sign-in/callback"}
+          redirectUrl="/"
           appearance={{
             elements: {
               formButtonPrimary: 
@@ -133,7 +133,7 @@ export const SignUpPage = () => {
           path="/sign-up" 
           signInUrl="/sign-in"
           afterSignUpUrl="/"
-          redirectUrl={window.location.origin + "/sign-up/callback"}
+          redirectUrl="/"
           appearance={{
             elements: {
               formButtonPrimary: 
