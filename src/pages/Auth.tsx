@@ -41,7 +41,9 @@ export const SignInPage = () => {
       origin: hostname,
       path,
       search: location.search,
-      isCallback: path.includes("callback") || path.includes("sso-callback")
+      isCallback: path.includes("callback") || path.includes("sso-callback"),
+      isMobile: /Capacitor|Android|iOS/.test(navigator.userAgent),
+      userAgent: navigator.userAgent
     });
   }, [isSignedIn, navigate, location]);
 
@@ -50,6 +52,9 @@ export const SignInPage = () => {
     console.error("Sign in error:", err);
     setAuthError(err.message || "Failed to sign in. Please try again.");
   };
+
+  // Detect if running in Capacitor/mobile
+  const isMobileApp = /Capacitor|Android|iOS/.test(navigator.userAgent);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -70,6 +75,7 @@ export const SignInPage = () => {
           <div className="text-xs text-gray-500 mb-4">
             <p>{debugInfo}</p>
             <p>Make sure this origin is added as an authorized redirect URI in your OAuth providers.</p>
+            <p>Running in {isMobileApp ? 'mobile app' : 'browser'}</p>
           </div>
         )}
 
@@ -78,7 +84,6 @@ export const SignInPage = () => {
           path="/sign-in" 
           signUpUrl="/sign-up"
           afterSignInUrl="/"
-          redirectUrl={window.location.origin}
           appearance={{
             elements: {
               formButtonPrimary: 
@@ -130,9 +135,14 @@ export const SignUpPage = () => {
       origin: hostname,
       path,
       search: location.search,
-      isCallback: path.includes("callback") || path.includes("sso-callback")
+      isCallback: path.includes("callback") || path.includes("sso-callback"),
+      isMobile: /Capacitor|Android|iOS/.test(navigator.userAgent),
+      userAgent: navigator.userAgent
     });
   }, [isSignedIn, navigate, location]);
+
+  // Detect if running in Capacitor/mobile
+  const isMobileApp = /Capacitor|Android|iOS/.test(navigator.userAgent);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -153,6 +163,7 @@ export const SignUpPage = () => {
           <div className="text-xs text-gray-500 mb-4">
             <p>{debugInfo}</p>
             <p>Make sure this origin is added as an authorized redirect URI in your OAuth providers.</p>
+            <p>Running in {isMobileApp ? 'mobile app' : 'browser'}</p>
           </div>
         )}
 
@@ -161,7 +172,6 @@ export const SignUpPage = () => {
           path="/sign-up" 
           signInUrl="/sign-in"
           afterSignUpUrl="/"
-          redirectUrl={window.location.origin}
           appearance={{
             elements: {
               formButtonPrimary: 

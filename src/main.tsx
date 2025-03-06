@@ -28,7 +28,6 @@ createRoot(document.getElementById("root")!).render(
     signUpUrl="/sign-up"
     afterSignInUrl="/"
     afterSignUpUrl="/"
-    redirectUrl={window.location.origin}
   >
     <App />
   </ClerkProvider>
