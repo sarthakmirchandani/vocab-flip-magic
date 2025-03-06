@@ -29,29 +29,28 @@ export const SignInPage = () => {
 
     // Check for redirect_url param
     const redirectUrl = urlParams.get("redirect_url");
-    console.log("Redirect URL from params:", redirectUrl);
-
+    
     // Log hostname and path for debugging OAuth redirects
     const hostname = window.location.origin;
     const path = location.pathname;
     const fullUrl = window.location.href;
-    setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
+    const isMobile = /Capacitor|Android|iOS/.test(navigator.userAgent);
+    
     console.log("Auth page loaded:", {
       fullUrl,
       origin: hostname,
       path,
       search: location.search,
       isCallback: path.includes("callback") || path.includes("sso-callback"),
-      isMobile: /Capacitor|Android|iOS/.test(navigator.userAgent),
+      isMobile,
       userAgent: navigator.userAgent
     });
+    
+    // Only show debug info in development or when there's an error
+    if (process.env.NODE_ENV === 'development' || error) {
+      setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
+    }
   }, [isSignedIn, navigate, location]);
-
-  // Handle authentication errors from Clerk
-  const handleSignInError = (err: Error) => {
-    console.error("Sign in error:", err);
-    setAuthError(err.message || "Failed to sign in. Please try again.");
-  };
 
   // Detect if running in Capacitor/mobile
   const isMobileApp = /Capacitor|Android|iOS/.test(navigator.userAgent);
@@ -72,10 +71,13 @@ export const SignInPage = () => {
         )}
 
         {debugInfo && process.env.NODE_ENV === 'development' && (
-          <div className="text-xs text-gray-500 mb-4">
+          <div className="text-xs text-gray-500 mb-4 p-2 bg-gray-100 rounded">
             <p>{debugInfo}</p>
-            <p>Make sure this origin is added as an authorized redirect URI in your OAuth providers.</p>
-            <p>Running in {isMobileApp ? 'mobile app' : 'browser'}</p>
+            {isMobileApp ? (
+              <p className="font-semibold mt-1">Running in mobile app environment</p>
+            ) : (
+              <p>Running in browser environment</p>
+            )}
           </div>
         )}
 
@@ -121,24 +123,26 @@ export const SignUpPage = () => {
       console.error("Auth error from URL:", error);
     }
 
-    // Check for redirect_url param
-    const redirectUrl = urlParams.get("redirect_url");
-    console.log("Redirect URL from params:", redirectUrl);
-
     // Log hostname and path for debugging OAuth redirects
     const hostname = window.location.origin;
     const path = location.pathname;
     const fullUrl = window.location.href;
-    setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
+    const isMobile = /Capacitor|Android|iOS/.test(navigator.userAgent);
+    
     console.log("Auth page loaded:", {
       fullUrl,
       origin: hostname,
       path,
       search: location.search,
       isCallback: path.includes("callback") || path.includes("sso-callback"),
-      isMobile: /Capacitor|Android|iOS/.test(navigator.userAgent),
+      isMobile,
       userAgent: navigator.userAgent
     });
+    
+    // Only show debug info in development or when there's an error
+    if (process.env.NODE_ENV === 'development' || error) {
+      setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
+    }
   }, [isSignedIn, navigate, location]);
 
   // Detect if running in Capacitor/mobile
@@ -160,10 +164,13 @@ export const SignUpPage = () => {
         )}
 
         {debugInfo && process.env.NODE_ENV === 'development' && (
-          <div className="text-xs text-gray-500 mb-4">
+          <div className="text-xs text-gray-500 mb-4 p-2 bg-gray-100 rounded">
             <p>{debugInfo}</p>
-            <p>Make sure this origin is added as an authorized redirect URI in your OAuth providers.</p>
-            <p>Running in {isMobileApp ? 'mobile app' : 'browser'}</p>
+            {isMobileApp ? (
+              <p className="font-semibold mt-1">Running in mobile app environment</p>
+            ) : (
+              <p>Running in browser environment</p>
+            )}
           </div>
         )}
 
