@@ -27,12 +27,23 @@ export const SignInPage = () => {
       console.error("Auth error from URL:", error);
     }
 
+    // Check for redirect_url param
+    const redirectUrl = urlParams.get("redirect_url");
+    console.log("Redirect URL from params:", redirectUrl);
+
     // Log hostname and path for debugging OAuth redirects
     const hostname = window.location.origin;
     const path = location.pathname;
-    setDebugInfo(`Current origin: ${hostname}, Path: ${path}`);
-    console.log("Auth page loaded with origin:", hostname, "Path:", path);
-  }, [isSignedIn, navigate, location.pathname]);
+    const fullUrl = window.location.href;
+    setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
+    console.log("Auth page loaded:", {
+      fullUrl,
+      origin: hostname,
+      path,
+      search: location.search,
+      isCallback: path.includes("callback") || path.includes("sso-callback")
+    });
+  }, [isSignedIn, navigate, location]);
 
   // Handle authentication errors from Clerk
   const handleSignInError = (err: Error) => {
@@ -67,7 +78,7 @@ export const SignInPage = () => {
           path="/sign-in" 
           signUpUrl="/sign-up"
           afterSignInUrl="/"
-          redirectUrl="/"
+          redirectUrl={window.location.origin}
           appearance={{
             elements: {
               formButtonPrimary: 
@@ -105,12 +116,23 @@ export const SignUpPage = () => {
       console.error("Auth error from URL:", error);
     }
 
+    // Check for redirect_url param
+    const redirectUrl = urlParams.get("redirect_url");
+    console.log("Redirect URL from params:", redirectUrl);
+
     // Log hostname and path for debugging OAuth redirects
     const hostname = window.location.origin;
     const path = location.pathname;
-    setDebugInfo(`Current origin: ${hostname}, Path: ${path}`);
-    console.log("Auth page loaded with origin:", hostname, "Path:", path);
-  }, [isSignedIn, navigate, location.pathname]);
+    const fullUrl = window.location.href;
+    setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
+    console.log("Auth page loaded:", {
+      fullUrl,
+      origin: hostname,
+      path,
+      search: location.search,
+      isCallback: path.includes("callback") || path.includes("sso-callback")
+    });
+  }, [isSignedIn, navigate, location]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -139,7 +161,7 @@ export const SignUpPage = () => {
           path="/sign-up" 
           signInUrl="/sign-in"
           afterSignUpUrl="/"
-          redirectUrl="/"
+          redirectUrl={window.location.origin}
           appearance={{
             elements: {
               formButtonPrimary: 

@@ -23,11 +23,12 @@ createRoot(document.getElementById("root")!).render(
     localization={{
       socialButtonsBlockButton: "Continue with {{provider}}"
     }}
-    // Define the redirect URLs 
+    // Define the redirect URLs with all possible patterns
     signInUrl="/sign-in"
     signUpUrl="/sign-up"
     afterSignInUrl="/"
     afterSignUpUrl="/"
+    redirectUrl={window.location.origin}
   >
     <App />
   </ClerkProvider>

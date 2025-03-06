@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SignInPage, SignUpPage } from "./pages/Auth";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import { SignedIn, SignedOut, ClerkLoaded, ClerkLoading } from "@clerk/clerk-react";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 const queryClient = new QueryClient();
 
@@ -37,9 +37,11 @@ const App = () => (
           <Route path="/sign-in" element={<SignInPage />} />
           <Route path="/sign-up" element={<SignUpPage />} />
           
-          {/* OAuth callback routes */}
+          {/* OAuth callback routes - all possible patterns */}
           <Route path="/sign-in/callback/*" element={<SignInPage />} />
-          <Route path="/sign-up/callback/*" element={<SignUpPage />} /> {/* Fixed to use SignUpPage */}
+          <Route path="/sign-up/callback/*" element={<SignUpPage />} />
+          <Route path="/sign-in/sso-callback" element={<SignInPage />} />
+          <Route path="/sign-up/sso-callback" element={<SignUpPage />} />
           
           {/* 404 route */}
           <Route path="*" element={<NotFound />} />
