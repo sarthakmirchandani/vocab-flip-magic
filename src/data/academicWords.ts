@@ -10,7 +10,7 @@ export const academicWords: { [key: string]: Word[] } = {
         "The scientists will analyze the data from the experiment.",
         "Students are expected to analyze the poem and discuss its themes."
       ],
-      image: "https://images.unsplash.com/photo-1661956602944-249bcd04b63f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      image: "https://images.unsplash.com/photo-1603643899628-a6573808cce8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     },
     {
       id: "b2",
@@ -309,19 +309,16 @@ export const academicWords: { [key: string]: Word[] } = {
   ]
 };
 
-// Function to add new words
 export const addWord = (level: string, word: Word) => {
   if (academicWords[level]) {
     academicWords[level].push(word);
   }
 };
 
-// Function to get words by level
 export const getWordsByLevel = (level: string): Word[] => {
   return academicWords[level] || [];
 };
 
-// Function to get all words
 export const getAllWords = (): { [key: string]: Word[] } => {
   return academicWords;
 };
