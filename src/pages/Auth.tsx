@@ -10,7 +10,6 @@ export const SignInPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [authError, setAuthError] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
   useEffect(() => {
     // Redirect to home if already signed in
@@ -45,15 +44,7 @@ export const SignInPage = () => {
       isMobile,
       userAgent: navigator.userAgent
     });
-    
-    // Only show debug info in development or when there's an error
-    if (process.env.NODE_ENV === 'development' || error) {
-      setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
-    }
   }, [isSignedIn, navigate, location]);
-
-  // Detect if running in Capacitor/mobile
-  const isMobileApp = /Capacitor|Android|iOS/.test(navigator.userAgent);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -68,17 +59,6 @@ export const SignInPage = () => {
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{authError}</AlertDescription>
           </Alert>
-        )}
-
-        {debugInfo && process.env.NODE_ENV === 'development' && (
-          <div className="text-xs text-gray-500 mb-4 p-2 bg-gray-100 rounded">
-            <p>{debugInfo}</p>
-            {isMobileApp ? (
-              <p className="font-semibold mt-1">Running in mobile app environment</p>
-            ) : (
-              <p>Running in browser environment</p>
-            )}
-          </div>
         )}
 
         <SignIn 
@@ -106,7 +86,6 @@ export const SignUpPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [authError, setAuthError] = useState<string | null>(null);
-  const [debugInfo, setDebugInfo] = useState<string | null>(null);
 
   useEffect(() => {
     // Redirect to home if already signed in
@@ -138,15 +117,7 @@ export const SignUpPage = () => {
       isMobile,
       userAgent: navigator.userAgent
     });
-    
-    // Only show debug info in development or when there's an error
-    if (process.env.NODE_ENV === 'development' || error) {
-      setDebugInfo(`Current URL: ${fullUrl}\nOrigin: ${hostname}, Path: ${path}`);
-    }
   }, [isSignedIn, navigate, location]);
-
-  // Detect if running in Capacitor/mobile
-  const isMobileApp = /Capacitor|Android|iOS/.test(navigator.userAgent);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -161,17 +132,6 @@ export const SignUpPage = () => {
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{authError}</AlertDescription>
           </Alert>
-        )}
-
-        {debugInfo && process.env.NODE_ENV === 'development' && (
-          <div className="text-xs text-gray-500 mb-4 p-2 bg-gray-100 rounded">
-            <p>{debugInfo}</p>
-            {isMobileApp ? (
-              <p className="font-semibold mt-1">Running in mobile app environment</p>
-            ) : (
-              <p>Running in browser environment</p>
-            )}
-          </div>
         )}
 
         <SignUp 
