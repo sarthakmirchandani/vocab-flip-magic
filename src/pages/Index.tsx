@@ -1,97 +1,71 @@
 
-import { useState, useEffect } from "react";
-import { FlashcardList } from "@/components/FlashcardList";
-import { useToast } from "@/hooks/use-toast";
-import { Word } from "@/components/Flashcard";
-import { Button } from "@/components/ui/button";
-import { getWordsByLevel } from "@/data/academicWords";
-import { NotificationService } from "@/services/NotificationService";
-import { useClerk, useUser } from "@clerk/clerk-react";
+import { useState } from 'react';
+import { FlashcardList } from '@/components/FlashcardList';
+import { getWordsByLevel } from '@/data/academicWords';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Bell } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useWordNotifications } from '@/services/WordNotificationService';
 
 const Index = () => {
+  const [level, setLevel] = useState('beginner');
   const { toast } = useToast();
-  const { user } = useUser();
-  const { signOut } = useClerk();
-  const [currentLevel, setCurrentLevel] = useState<string>("beginner");
-  const [displayedWords, setDisplayedWords] = useState<Word[]>(getWordsByLevel("beginner"));
-
-  useEffect(() => {
-    // Initialize push notifications
-    NotificationService.initialize().catch(err => {
-      console.error("Failed to initialize notifications:", err);
-      // Don't show toast in web environment for this expected error
-      if (err.code !== "UNIMPLEMENTED") {
-        toast({
-          title: "Notification Error",
-          description: "Failed to initialize notifications",
-          variant: "destructive",
-        });
-      }
-    });
-
-    // Show welcome toast when app loads
-    toast({
-      title: `Welcome to WordPill, ${user?.firstName || 'User'}!`,
-      description: "Tap on cards to flip them and learn new words",
-    });
-  }, [toast, user]);
-
-  const handleLevelChange = (level: string) => {
-    setCurrentLevel(level);
-    setDisplayedWords(getWordsByLevel(level));
+  const { sendTestNotification } = useWordNotifications();
+  
+  // Handler for testing notifications
+  const handleTestNotification = async () => {
+    try {
+      const result = await sendTestNotification();
+      
+      toast({
+        title: "Notification Sent",
+        description: `Word of the day: "${result.word.word}" - Next notification at ${result.nextNotification.toLocaleTimeString()}`,
+        duration: 5000,
+      });
+    } catch (error) {
+      toast({
+        title: "Notification Error",
+        description: "Failed to send notification. Check permissions.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    }
   };
-
-  const handleSignOut = () => {
-    signOut();
-  };
-
+  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="container py-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800">WordPill!</h1>
-              <p className="text-gray-600 mt-2">Expand your vocabulary with interactive flashcards</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
-                Signed in as {user?.fullName || user?.primaryEmailAddress?.emailAddress}
-              </span>
-              <Button variant="outline" onClick={handleSignOut}>
-                Sign Out
-              </Button>
-            </div>
-          </div>
-          
-          <div className="flex gap-2 mt-4">
-            <Button 
-              variant={currentLevel === "beginner" ? "default" : "outline"}
-              onClick={() => handleLevelChange("beginner")}
-              className="rounded-full"
-            >
-              Beginner
-            </Button>
-            <Button 
-              variant={currentLevel === "intermediate" ? "default" : "outline"}
-              onClick={() => handleLevelChange("intermediate")}
-              className="rounded-full"
-            >
-              Intermediate
-            </Button>
-            <Button 
-              variant={currentLevel === "advanced" ? "default" : "outline"}
-              onClick={() => handleLevelChange("advanced")}
-              className="rounded-full"
-            >
-              Advanced
-            </Button>
-          </div>
-        </div>
+    <div className="container mx-auto p-4 max-w-4xl">
+      <header className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">WordPill</h1>
+        <Button 
+          variant="outline" 
+          size="icon"
+          onClick={handleTestNotification}
+          title="Test Daily Word Notification"
+        >
+          <Bell className="h-[1.2rem] w-[1.2rem]" />
+        </Button>
       </header>
-      <main>
-        <FlashcardList words={displayedWords} />
-      </main>
+      
+      <Tabs defaultValue="beginner" className="mb-8" onValueChange={setLevel}>
+        <TabsList className="w-full grid grid-cols-3">
+          <TabsTrigger value="beginner">Beginner</TabsTrigger>
+          <TabsTrigger value="intermediate">Intermediate</TabsTrigger>
+          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="beginner">
+          <FlashcardList words={getWordsByLevel('beginner')} />
+        </TabsContent>
+        
+        <TabsContent value="intermediate">
+          <FlashcardList words={getWordsByLevel('intermediate')} />
+        </TabsContent>
+        
+        <TabsContent value="advanced">
+          <FlashcardList words={getWordsByLevel('advanced')} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
