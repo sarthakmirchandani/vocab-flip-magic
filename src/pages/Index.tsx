@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Bell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useWordNotifications } from '@/services/WordNotificationService';
+import { QuizProvider } from '@/contexts/QuizContext';
+import { Quiz } from '@/components/Quiz';
+import { QuizButton } from '@/components/QuizButton';
 
 const Index = () => {
   const [level, setLevel] = useState('beginner');
@@ -34,39 +37,46 @@ const Index = () => {
   };
   
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <header className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">WordPill</h1>
-        <Button 
-          variant="outline" 
-          size="icon"
-          onClick={handleTestNotification}
-          title="Test Daily Word Notification"
-        >
-          <Bell className="h-[1.2rem] w-[1.2rem]" />
-        </Button>
-      </header>
-      
-      <Tabs defaultValue="beginner" className="mb-8" onValueChange={setLevel}>
-        <TabsList className="w-full grid grid-cols-3">
-          <TabsTrigger value="beginner">Beginner</TabsTrigger>
-          <TabsTrigger value="intermediate">Intermediate</TabsTrigger>
-          <TabsTrigger value="advanced">Advanced</TabsTrigger>
-        </TabsList>
+    <QuizProvider>
+      <div className="container mx-auto p-4 max-w-4xl">
+        <header className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">WordPill</h1>
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={handleTestNotification}
+            title="Test Daily Word Notification"
+          >
+            <Bell className="h-[1.2rem] w-[1.2rem]" />
+          </Button>
+        </header>
         
-        <TabsContent value="beginner">
-          <FlashcardList words={getWordsByLevel('beginner')} />
-        </TabsContent>
+        <Tabs defaultValue="beginner" className="mb-8" onValueChange={setLevel}>
+          <TabsList className="w-full grid grid-cols-3">
+            <TabsTrigger value="beginner">Beginner</TabsTrigger>
+            <TabsTrigger value="intermediate">Intermediate</TabsTrigger>
+            <TabsTrigger value="advanced">Advanced</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="beginner">
+            <FlashcardList words={getWordsByLevel('beginner')} />
+            <QuizButton words={getWordsByLevel('beginner')} level="beginner" />
+          </TabsContent>
+          
+          <TabsContent value="intermediate">
+            <FlashcardList words={getWordsByLevel('intermediate')} />
+            <QuizButton words={getWordsByLevel('intermediate')} level="intermediate" />
+          </TabsContent>
+          
+          <TabsContent value="advanced">
+            <FlashcardList words={getWordsByLevel('advanced')} />
+            <QuizButton words={getWordsByLevel('advanced')} level="advanced" />
+          </TabsContent>
+        </Tabs>
         
-        <TabsContent value="intermediate">
-          <FlashcardList words={getWordsByLevel('intermediate')} />
-        </TabsContent>
-        
-        <TabsContent value="advanced">
-          <FlashcardList words={getWordsByLevel('advanced')} />
-        </TabsContent>
-      </Tabs>
-    </div>
+        <Quiz />
+      </div>
+    </QuizProvider>
   );
 };
 
