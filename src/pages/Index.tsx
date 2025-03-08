@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { FlashcardList } from '@/components/FlashcardList';
 import { getWordsByLevel } from '@/data/academicWords';
@@ -6,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Bell } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useWordNotifications } from '@/services/WordNotificationService';
+import { useWordNotifications } from '@/hooks/useWordNotifications';
 import { QuizProvider } from '@/contexts/QuizContext';
 import { Quiz } from '@/components/Quiz';
 import { QuizButton } from '@/components/QuizButton';
@@ -16,7 +15,6 @@ const Index = () => {
   const { toast } = useToast();
   const { sendTestNotification } = useWordNotifications();
   
-  // Handler for testing notifications
   const handleTestNotification = async () => {
     try {
       const result = await sendTestNotification();
