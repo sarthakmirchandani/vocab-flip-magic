@@ -1,65 +1,80 @@
-
-import { useState, useEffect } from "react";
-import { FlashcardList } from "@/components/FlashcardList";
-import { useToast } from "@/hooks/use-toast";
-import { Word } from "@/components/Flashcard";
-import { Button } from "@/components/ui/button";
-import { getWordsByLevel } from "@/data/academicWords";
-import { NotificationService } from "@/services/NotificationService";
+import { useState } from 'react';
+import { FlashcardList } from '@/components/FlashcardList';
+import { getWordsByLevel } from '@/data/academicWords';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Bell } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useWordNotifications } from '@/hooks/useWordNotifications';
+import { QuizProvider } from '@/contexts/QuizContext';
+import { Quiz } from '@/components/Quiz';
+import { QuizButton } from '@/components/QuizButton';
 
 const Index = () => {
+  const [level, setLevel] = useState('beginner');
   const { toast } = useToast();
-  const [currentLevel, setCurrentLevel] = useState<string>("beginner");
-  const [displayedWords, setDisplayedWords] = useState<Word[]>(getWordsByLevel("beginner"));
-
-  useEffect(() => {
-    // Initialize push notifications
-    NotificationService.initialize().catch(err => {
-      console.error("Failed to initialize notifications:", err);
-    });
-  }, []);
-
-  const handleLevelChange = (level: string) => {
-    setCurrentLevel(level);
-    setDisplayedWords(getWordsByLevel(level));
+  const { sendTestNotification } = useWordNotifications();
+  
+  const handleTestNotification = async () => {
+    try {
+      const result = await sendTestNotification();
+      
+      toast({
+        title: "Notification Sent",
+        description: `Word of the day: "${result.word.word}" - Next notification at ${result.nextNotification.toLocaleTimeString()}`,
+        duration: 5000,
+      });
+    } catch (error) {
+      toast({
+        title: "Notification Error",
+        description: "Failed to send notification. Check permissions.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    }
   };
-
+  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="container py-6">
-          <h1 className="text-3xl font-bold text-gray-800">WordPill!</h1>
-          <p className="text-gray-600 mt-2">Expand your vocabulary with interactive flashcards</p>
+    <QuizProvider>
+      <div className="container mx-auto p-4 max-w-4xl">
+        <header className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800">WordPill</h1>
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={handleTestNotification}
+            title="Test Daily Word Notification"
+          >
+            <Bell className="h-[1.2rem] w-[1.2rem]" />
+          </Button>
+        </header>
+        
+        <Tabs defaultValue="beginner" className="mb-8" onValueChange={setLevel}>
+          <TabsList className="w-full grid grid-cols-3">
+            <TabsTrigger value="beginner">Beginner</TabsTrigger>
+            <TabsTrigger value="intermediate">Intermediate</TabsTrigger>
+            <TabsTrigger value="advanced">Advanced</TabsTrigger>
+          </TabsList>
           
-          <div className="flex gap-2 mt-4">
-            <Button 
-              variant={currentLevel === "beginner" ? "default" : "outline"}
-              onClick={() => handleLevelChange("beginner")}
-              className="rounded-full"
-            >
-              Beginner
-            </Button>
-            <Button 
-              variant={currentLevel === "intermediate" ? "default" : "outline"}
-              onClick={() => handleLevelChange("intermediate")}
-              className="rounded-full"
-            >
-              Intermediate
-            </Button>
-            <Button 
-              variant={currentLevel === "advanced" ? "default" : "outline"}
-              onClick={() => handleLevelChange("advanced")}
-              className="rounded-full"
-            >
-              Advanced
-            </Button>
-          </div>
-        </div>
-      </header>
-      <main>
-        <FlashcardList words={displayedWords} />
-      </main>
-    </div>
+          <TabsContent value="beginner">
+            <FlashcardList words={getWordsByLevel('beginner')} />
+            <QuizButton words={getWordsByLevel('beginner')} level="beginner" />
+          </TabsContent>
+          
+          <TabsContent value="intermediate">
+            <FlashcardList words={getWordsByLevel('intermediate')} />
+            <QuizButton words={getWordsByLevel('intermediate')} level="intermediate" />
+          </TabsContent>
+          
+          <TabsContent value="advanced">
+            <FlashcardList words={getWordsByLevel('advanced')} />
+            <QuizButton words={getWordsByLevel('advanced')} level="advanced" />
+          </TabsContent>
+        </Tabs>
+        
+        <Quiz />
+      </div>
+    </QuizProvider>
   );
 };
 

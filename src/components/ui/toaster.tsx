@@ -1,3 +1,4 @@
+
 import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
@@ -7,27 +8,57 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
+import { useEffect, useRef } from "react"
 
 export function Toaster() {
   const { toasts } = useToast()
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  useEffect(() => {
+    try {
+      audioRef.current = new Audio("/notification-sound.mp3")
+    } catch (err) {
+      console.error("Error initializing audio:", err)
+    }
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current = null
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    // Play sound when a new toast appears
+    if (toasts.length > 0 && audioRef.current) {
+      const playPromise = audioRef.current.play()
+      
+      // Handle play promise to avoid uncaught promise rejection
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.log("Error playing notification sound:", err)
+        })
+      }
+    }
+  }, [toasts.length])
 
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
-          <Toast key={id} {...props}>
+          <Toast key={id} {...props} className="bg-black text-white border-gray-700">
             <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
+              {title && <ToastTitle className="text-white">{title}</ToastTitle>}
               {description && (
-                <ToastDescription>{description}</ToastDescription>
+                <ToastDescription className="text-gray-300">{description}</ToastDescription>
               )}
             </div>
             {action}
-            <ToastClose />
+            <ToastClose className="text-white hover:text-gray-300" />
           </Toast>
         )
       })}
-      <ToastViewport />
+      <ToastViewport className="bottom-0 top-auto" />
     </ToastProvider>
   )
 }

@@ -1,10 +1,13 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { SignInPage, SignUpPage } from "./pages/Auth";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +18,32 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          {/* Protected route - only accessible when signed in */}
+          <Route
+            path="/"
+            element={
+              <>
+                <SignedIn>
+                  <Index />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/sign-in" replace />
+                </SignedOut>
+              </>
+            }
+          />
+          
+          {/* Authentication routes */}
+          <Route path="/sign-in" element={<SignInPage />} />
+          <Route path="/sign-up" element={<SignUpPage />} />
+          
+          {/* OAuth callback routes - all possible patterns */}
+          <Route path="/sign-in/callback/*" element={<SignInPage />} />
+          <Route path="/sign-up/callback/*" element={<SignUpPage />} />
+          <Route path="/sign-in/sso-callback" element={<SignInPage />} />
+          <Route path="/sign-up/sso-callback" element={<SignUpPage />} />
+          
+          {/* 404 route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

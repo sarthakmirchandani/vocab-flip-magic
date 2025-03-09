@@ -3,12 +3,12 @@ apply plugin: 'com.google.gms.google-services' // Firebase services
 
 android {
     namespace "com.vocabflip.app"
-    compileSdk 35 // Using SDK 35 as required by dependencies
+    compileSdk 34 // Keep this at 34 as it's the maximum recommended for Gradle plugin 8.2.2
 
     defaultConfig {
         applicationId "com.vocabflip.app"
         minSdkVersion 24  // Ensure Firebase compatibility
-        targetSdkVersion 35 // Match compileSdk
+        targetSdkVersion 34 // Match compileSdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -48,15 +48,18 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.1"
 
     // Using compatible versions of core and core-ktx
-    implementation "androidx.core:core:1.15.0"
-    implementation "androidx.core:core-ktx:1.15.0"
+    // Downgrade these dependencies to versions compatible with SDK 34
+    implementation "androidx.core:core:1.12.0"
+    implementation "androidx.core:core-ktx:1.12.0"
+    implementation "androidx.activity:activity:1.8.2"  // Added this for OnUserLeaveHintProvider
+    implementation "androidx.fragment:fragment:1.6.2"  // Added this for compatibility
 
     // ✅ Capacitor Dependencies
     implementation project(':capacitor-android')
     implementation project(':capacitor-cordova-android-plugins')
 
     // ✅ Firebase Dependencies (Always Use BOM)
-    implementation platform('com.google.firebase:firebase-bom:33.9.0')
+    implementation platform('com.google.firebase:firebase-bom:33.0.0')
 
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
@@ -73,11 +76,29 @@ dependencies {
 
         resolutionStrategy {
             force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+            // Force core and core-ktx to versions compatible with SDK 34
+            force "androidx.core:core:1.12.0"
+            force "androidx.core:core-ktx:1.12.0"
+            force "androidx.activity:activity:1.8.2"
+            force "androidx.fragment:fragment:1.6.2"
 
             // Force all Kotlin dependencies to use the same version
             eachDependency { details ->
                 if (details.requested.group == "org.jetbrains.kotlin") {
                     details.useVersion "1.8.22"
+                }
+                // Force specific versions for androidx.core components
+                if (details.requested.group == "androidx.core" && 
+                   (details.requested.name == "core" || details.requested.name == "core-ktx")) {
+                    details.useVersion "1.12.0"
+                }
+                // Force specific versions for androidx.activity
+                if (details.requested.group == "androidx.activity") {
+                    details.useVersion "1.8.2"
+                }
+                // Force specific versions for androidx.fragment
+                if (details.requested.group == "androidx.fragment") {
+                    details.useVersion "1.6.2"
                 }
             }
         }

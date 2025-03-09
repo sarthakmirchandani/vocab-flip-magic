@@ -1,50 +1,109 @@
 
 import { NotificationService } from './NotificationService';
 import { getWordsByLevel } from '@/data/academicWords';
+import { useEffect } from 'react';
+import { useAuth } from '@clerk/clerk-react';
 
 export class WordNotificationService {
-  // This method would typically be called by a server-side scheduled job
-  // For testing purposes, we can call it manually or simulate it client-side
+  // Schedule a notification with today's word of the day
   static async sendDailyWordNotification() {
     try {
-      // Get a random word from the beginner level (or any level you prefer)
+      // Get a random word from the beginner level
       const beginnerWords = getWordsByLevel('beginner');
       const randomIndex = Math.floor(Math.random() * beginnerWords.length);
       const wordOfTheDay = beginnerWords[randomIndex];
       
-      // Schedule a notification with this word
+      // Create notification text
+      const title = 'Word of the Day';
+      const body = `Today's word: "${wordOfTheDay.word}" - ${wordOfTheDay.definition.substring(0, 50)}...`;
+      
+      // Show immediate notification for debugging
+      await NotificationService.showLocalNotification(title, body);
+      
+      // Schedule notification for tomorrow at 11:00 AM
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(9, 0, 0, 0); // 9:00 AM
+      tomorrow.setHours(11, 0, 0, 0); // 11:00 AM
 
-      await NotificationService.scheduleNotification(
-        'Word of the Day',
-        `Learn "${wordOfTheDay.word}" - ${wordOfTheDay.definition.substring(0, 50)}...`,
+      const scheduled = await NotificationService.scheduleNotification(
+        title,
+        body,
         tomorrow
       );
       
-      console.log(`Scheduled word of the day notification: ${wordOfTheDay.word}`);
-      return wordOfTheDay;
+      console.log(`Scheduled word of the day notification for ${tomorrow.toLocaleString()}`);
+      return {
+        scheduled,
+        word: wordOfTheDay,
+        nextNotification: tomorrow
+      };
     } catch (error) {
       console.error('Error sending daily word notification:', error);
       throw error;
     }
   }
 
-  // This would simulate setting up a recurring notification
-  // For a real implementation, this would be handled server-side
-  static setupDailyNotifications() {
-    // For testing, we'll just schedule one notification for tomorrow
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(9, 0, 0, 0); // 9:00 AM
-
-    console.log(`Simulated setup of daily notifications for ${tomorrow.toLocaleString()}`);
+  // Check if it's time to schedule the next notification
+  static shouldScheduleNotification() {
+    const lastScheduled = localStorage.getItem('lastNotificationScheduled');
+    if (!lastScheduled) return true;
     
-    // In a real app, you'd register this with a server that would send push notifications
-    return {
-      scheduled: true,
-      nextNotification: tomorrow
-    };
+    const now = new Date();
+    const lastDate = new Date(lastScheduled);
+    
+    // Schedule a new notification if the last one was scheduled yesterday or earlier
+    return now.getDate() !== lastDate.getDate() || 
+           now.getMonth() !== lastDate.getMonth() || 
+           now.getFullYear() !== lastDate.getFullYear();
+  }
+
+  // Set up daily notifications and register for tomorrow
+  static setupDailyNotifications() {
+    if (this.shouldScheduleNotification()) {
+      this.sendDailyWordNotification()
+        .then(() => {
+          localStorage.setItem('lastNotificationScheduled', new Date().toISOString());
+          console.log('Daily word notification scheduled successfully');
+        })
+        .catch(error => {
+          console.error('Failed to schedule daily notification:', error);
+        });
+    } else {
+      console.log('Notification already scheduled for today');
+    }
   }
 }
+
+// React hook to manage notifications
+export const useWordNotifications = () => {
+  const { isSignedIn } = useAuth();
+  
+  useEffect(() => {
+    // Only set up notifications if user is signed in
+    if (isSignedIn) {
+      // Initialize push notifications
+      NotificationService.initialize()
+        .then(() => {
+          console.log('Notification service initialized');
+          // Set up daily notifications
+          WordNotificationService.setupDailyNotifications();
+        })
+        .catch(err => {
+          console.error('Error initializing notifications:', err);
+        });
+    }
+  }, [isSignedIn]);
+  
+  // Function to manually trigger a notification (for testing)
+  const sendTestNotification = async () => {
+    try {
+      const result = await WordNotificationService.sendDailyWordNotification();
+      return result;
+    } catch (error) {
+      console.error('Error sending test notification:', error);
+      throw error;
+    }
+  };
+  
+  return { sendTestNotification };
+};
