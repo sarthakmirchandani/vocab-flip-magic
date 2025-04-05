@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { FlashcardList } from '@/components/FlashcardList';
 import { getWordsByLevel } from '@/data/academicWords';
@@ -9,6 +10,7 @@ import { useWordNotifications } from '@/hooks/useWordNotifications';
 import { QuizProvider } from '@/contexts/QuizContext';
 import { Quiz } from '@/components/Quiz';
 import { QuizButton } from '@/components/QuizButton';
+import { ImportWordsButton } from '@/components/ImportWordsButton';
 
 const Index = () => {
   const [level, setLevel] = useState('beginner');
@@ -39,14 +41,17 @@ const Index = () => {
       <div className="container mx-auto p-4 max-w-4xl">
         <header className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">WordPill</h1>
-          <Button 
-            variant="outline" 
-            size="icon"
-            onClick={handleTestNotification}
-            title="Test Daily Word Notification"
-          >
-            <Bell className="h-[1.2rem] w-[1.2rem]" />
-          </Button>
+          <div className="flex items-center">
+            <Button 
+              variant="outline" 
+              size="icon"
+              onClick={handleTestNotification}
+              title="Test Daily Word Notification"
+            >
+              <Bell className="h-[1.2rem] w-[1.2rem]" />
+            </Button>
+            <ImportWordsButton />
+          </div>
         </header>
         
         <Tabs defaultValue="beginner" className="mb-8" onValueChange={setLevel}>
