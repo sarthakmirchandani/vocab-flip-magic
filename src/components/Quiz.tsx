@@ -129,18 +129,18 @@ export const Quiz = () => {
                             : "outline"
                         : "outline"
                     }
-                    className={`w-full justify-start text-left p-4 h-auto ${
+                    className={`w-full justify-start text-left p-4 h-auto break-words whitespace-normal ${
                       hasAnswered && option === currentQ.correctAnswer ? "bg-green-500 hover:bg-green-600" : ""
                     }`}
                     onClick={() => !hasAnswered && handleAnswer(option)}
                     disabled={hasAnswered}
                   >
-                    {option}
+                    <span className="mr-2">{option}</span>
                     {hasAnswered && option === currentQ.correctAnswer && (
-                      <CheckCircle className="ml-auto h-5 w-5" />
+                      <CheckCircle className="ml-auto h-5 w-5 flex-shrink-0" />
                     )}
                     {hasAnswered && option === currentQ.userAnswer && option !== currentQ.correctAnswer && (
-                      <XCircle className="ml-auto h-5 w-5" />
+                      <XCircle className="ml-auto h-5 w-5 flex-shrink-0" />
                     )}
                   </Button>
                 </div>
