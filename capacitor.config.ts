@@ -6,16 +6,19 @@ const config: CapacitorConfig = {
   appName: 'vocab-flip-magic',
   webDir: 'dist',
   server: {
-    url: 'https://055f41f6-09a5-4201-a3e3-9d3c2c6c7423.lovableproject.com?forceHideBadge=true',
+    // For local development, use localhost with the default Vite port
+    url: 'http://localhost:5173',
     cleartext: true,
     androidScheme: 'https',
     // Add hostname whitelist for OAuth flows
     allowNavigation: [
-      'worthy-caribou-72.clerk.accounts.dev',
       '*.accounts.dev',
-      '*.lovableproject.com',
+      '*.clerk.dev',
+      'worthy-caribou-72.clerk.accounts.dev',
       'accounts.google.com',
-      '*.googleapis.com'
+      '*.googleapis.com',
+      'localhost',
+      '10.0.2.2' // Android emulator localhost
     ]
   },
   plugins: {
