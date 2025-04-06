@@ -1,4 +1,3 @@
-
 import { SignIn, SignUp, useAuth } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -10,41 +9,63 @@ export const SignInPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Redirect to home if already signed in
-    if (isSignedIn) {
-      navigate("/");
-      return;
-    }
-
-    // Check for error query param in URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const error = urlParams.get("error");
-    if (error) {
-      setAuthError(decodeURIComponent(error));
-      console.error("Auth error from URL:", error);
-    }
-
-    // Check for redirect_url param
-    const redirectUrl = urlParams.get("redirect_url");
+    // Debug loading state
+    console.log("SignInPage mounting...");
     
-    // Log hostname and path for debugging OAuth redirects
-    const hostname = window.location.origin;
-    const path = location.pathname;
-    const fullUrl = window.location.href;
-    const isMobile = /Capacitor|Android|iOS/.test(navigator.userAgent);
-    
-    console.log("Auth page loaded:", {
-      fullUrl,
-      origin: hostname,
-      path,
-      search: location.search,
-      isCallback: path.includes("callback") || path.includes("sso-callback"),
-      isMobile,
-      userAgent: navigator.userAgent
-    });
+    try {
+      // Redirect to home if already signed in
+      if (isSignedIn) {
+        console.log("User is signed in, redirecting to /");
+        navigate("/");
+        return;
+      }
+
+      // Check for error query param in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get("error");
+      if (error) {
+        setAuthError(decodeURIComponent(error));
+        console.error("Auth error from URL:", error);
+      }
+
+      // Check for redirect_url param
+      const redirectUrl = urlParams.get("redirect_url");
+      
+      // Log hostname and path for debugging OAuth redirects
+      const hostname = window.location.origin;
+      const path = location.pathname;
+      const fullUrl = window.location.href;
+      const isMobile = /Capacitor|Android|iOS/.test(navigator.userAgent);
+      
+      console.log("Auth page loaded:", {
+        fullUrl,
+        origin: hostname,
+        path,
+        search: location.search,
+        isCallback: path.includes("callback") || path.includes("sso-callback"),
+        isMobile,
+        userAgent: navigator.userAgent
+      });
+    } catch (error) {
+      console.error("Error in SignInPage:", error);
+      setAuthError("An unexpected error occurred while loading the sign-in page");
+    } finally {
+      setIsLoading(false);
+    }
   }, [isSignedIn, navigate, location]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p>Loading authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -86,38 +107,60 @@ export const SignUpPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Redirect to home if already signed in
-    if (isSignedIn) {
-      navigate("/");
-      return;
-    }
-
-    // Check for error query param
-    const urlParams = new URLSearchParams(window.location.search);
-    const error = urlParams.get("error");
-    if (error) {
-      setAuthError(decodeURIComponent(error));
-      console.error("Auth error from URL:", error);
-    }
-
-    // Log hostname and path for debugging OAuth redirects
-    const hostname = window.location.origin;
-    const path = location.pathname;
-    const fullUrl = window.location.href;
-    const isMobile = /Capacitor|Android|iOS/.test(navigator.userAgent);
+    // Debug loading state
+    console.log("SignUpPage mounting...");
     
-    console.log("Auth page loaded:", {
-      fullUrl,
-      origin: hostname,
-      path,
-      search: location.search,
-      isCallback: path.includes("callback") || path.includes("sso-callback"),
-      isMobile,
-      userAgent: navigator.userAgent
-    });
+    try {
+      // Redirect to home if already signed in
+      if (isSignedIn) {
+        console.log("User is signed in, redirecting to /");
+        navigate("/");
+        return;
+      }
+
+      // Check for error query param
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get("error");
+      if (error) {
+        setAuthError(decodeURIComponent(error));
+        console.error("Auth error from URL:", error);
+      }
+
+      // Log hostname and path for debugging OAuth redirects
+      const hostname = window.location.origin;
+      const path = location.pathname;
+      const fullUrl = window.location.href;
+      const isMobile = /Capacitor|Android|iOS/.test(navigator.userAgent);
+      
+      console.log("Auth page loaded:", {
+        fullUrl,
+        origin: hostname,
+        path,
+        search: location.search,
+        isCallback: path.includes("callback") || path.includes("sso-callback"),
+        isMobile,
+        userAgent: navigator.userAgent
+      });
+    } catch (error) {
+      console.error("Error in SignUpPage:", error);
+      setAuthError("An unexpected error occurred while loading the sign-up page");
+    } finally {
+      setIsLoading(false);
+    }
   }, [isSignedIn, navigate, location]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p>Loading authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
