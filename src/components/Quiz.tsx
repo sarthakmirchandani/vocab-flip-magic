@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useQuiz, QuizQuestion } from '@/contexts/QuizContext';
 import { Button } from '@/components/ui/button';
@@ -129,13 +128,14 @@ export const Quiz = () => {
                             : "outline"
                         : "outline"
                     }
-                    className={`w-full justify-start text-left p-4 h-auto break-words whitespace-normal ${
+                    className={`w-full justify-start text-left p-4 h-auto break-words whitespace-normal overflow-hidden max-w-full flex items-center ${
                       hasAnswered && option === currentQ.correctAnswer ? "bg-green-500 hover:bg-green-600" : ""
                     }`}
                     onClick={() => !hasAnswered && handleAnswer(option)}
                     disabled={hasAnswered}
+                    style={{ wordBreak: 'break-word' }}
                   >
-                    <span className="mr-2">{option}</span>
+                    <div className="flex-grow mr-2 overflow-wrap-anywhere">{option}</div>
                     {hasAnswered && option === currentQ.correctAnswer && (
                       <CheckCircle className="ml-auto h-5 w-5 flex-shrink-0" />
                     )}
