@@ -17,6 +17,8 @@ const config: CapacitorConfig = {
       'worthy-caribou-72.clerk.accounts.dev',
       'accounts.google.com',
       '*.googleapis.com',
+      '*.gstatic.com',
+      '*.google.com',
       'localhost',
       '10.0.2.2' // Android emulator localhost
     ]

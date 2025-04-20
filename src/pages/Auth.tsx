@@ -1,3 +1,4 @@
+
 import { SignIn, SignUp, useAuth } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -87,6 +88,7 @@ export const SignInPage = () => {
           path="/sign-in" 
           signUpUrl="/sign-up"
           afterSignInUrl="/"
+          redirectUrl={window.location.origin + "/sign-in/sso-callback"}
           appearance={{
             elements: {
               formButtonPrimary: 
@@ -182,6 +184,7 @@ export const SignUpPage = () => {
           path="/sign-up" 
           signInUrl="/sign-in"
           afterSignUpUrl="/"
+          redirectUrl={window.location.origin + "/sign-up/sso-callback"}
           appearance={{
             elements: {
               formButtonPrimary: 

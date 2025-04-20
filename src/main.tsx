@@ -23,6 +23,9 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
+// Detect if running in a mobile environment
+const isMobile = /Capacitor|Android|iOS/.test(navigator.userAgent);
+
 // Wrap rendering in try/catch to capture initialization errors
 try {
   // Render the app with ClerkProvider
@@ -31,6 +34,14 @@ try {
       publishableKey={publishableKey}
       localization={{
         socialButtonsBlockButton: "Continue with {{provider}}"
+      }}
+      appearance={{
+        elements: {
+          rootBox: {
+            boxShadow: 'none',
+            width: '100%'
+          }
+        }
       }}
     >
       <App />
