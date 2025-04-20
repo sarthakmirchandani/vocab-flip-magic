@@ -6,11 +6,9 @@ const config: CapacitorConfig = {
   appName: 'vocab-flip-magic',
   webDir: 'dist',
   server: {
-    // For local development, use localhost with the default Vite port
-    url: 'http://localhost:5173',
+    url: 'http://localhost:5173', // Local development URL
     cleartext: true,
     androidScheme: 'https',
-    // Add hostname whitelist for OAuth flows
     allowNavigation: [
       '*.accounts.dev',
       '*.clerk.dev',
