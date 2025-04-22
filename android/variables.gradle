@@ -1,8 +1,8 @@
 
 ext {
-    minSdkVersion = 24 // Updated to match app build.gradle
-    compileSdkVersion = 34 // Updated to match app build.gradle
-    targetSdkVersion = 34 // Updated to match app build.gradle
+    minSdkVersion = 24
+    compileSdkVersion = 34
+    targetSdkVersion = 34
     androidxActivityVersion = '1.8.2'
     androidxAppCompatVersion = '1.6.1'
     androidxCoordinatorLayoutVersion = '1.2.0'
@@ -14,4 +14,5 @@ ext {
     androidxJunitVersion = '1.1.5'
     androidxEspressoCoreVersion = '3.5.1'
     cordovaAndroidVersion = '10.1.1'
+    kotlinVersion = '1.8.22' // Added explicit Kotlin version
 }
