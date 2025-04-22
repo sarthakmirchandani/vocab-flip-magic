@@ -1,3 +1,4 @@
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services' // Firebase services
 
@@ -28,6 +29,12 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    
+    // Add this configuration to prevent duplicate class errors
+    configurations {
+        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
 }
 
