@@ -31,10 +31,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     
-    // Add this configuration to prevent duplicate class errors
+    // Add comprehensive configuration to prevent duplicate class errors
     configurations {
-        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
-        all*.exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+        // Completely exclude the problematic JDK7/JDK8 modules
+        all {
+            // Direct exclusions
+            exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+            exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+        }
     }
 }
 
@@ -76,14 +80,19 @@ dependencies {
     // ✅ Kotlin stdlib - using only the new consolidated stdlib
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
 
-    // ✅ Completely exclude the problematic JDK7/JDK8 modules
+    // ✅ Testing Dependencies
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
+    
+    // ✅ Comprehensive dependency resolution strategy
     configurations.all {
-        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk7"
-        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8"
-
         resolutionStrategy {
+            // Force specific versions for all Kotlin components
             force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
-            // Force core and core-ktx to versions compatible with SDK 34
+            force "org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22"
+            
+            // Force versions for androidx components
             force "androidx.core:core:1.12.0"
             force "androidx.core:core-ktx:1.12.0"
             force "androidx.activity:activity:1.8.2"
@@ -94,27 +103,29 @@ dependencies {
                 if (details.requested.group == "org.jetbrains.kotlin") {
                     details.useVersion "1.8.22"
                 }
+                
                 // Force specific versions for androidx.core components
                 if (details.requested.group == "androidx.core" && 
                    (details.requested.name == "core" || details.requested.name == "core-ktx")) {
                     details.useVersion "1.12.0"
                 }
+                
                 // Force specific versions for androidx.activity
                 if (details.requested.group == "androidx.activity") {
                     details.useVersion "1.8.2"
                 }
+                
                 // Force specific versions for androidx.fragment
                 if (details.requested.group == "androidx.fragment") {
                     details.useVersion "1.6.2"
                 }
             }
         }
+        
+        // Make absolutely sure these are excluded
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk7"
+        exclude group: "org.jetbrains.kotlin", module: "kotlin-stdlib-jdk8"
     }
-
-    // ✅ Testing Dependencies
-    testImplementation "junit:junit:4.13.2"
-    androidTestImplementation "androidx.test.ext:junit:1.1.5"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
 }
 
 apply from: 'capacitor.build.gradle'
