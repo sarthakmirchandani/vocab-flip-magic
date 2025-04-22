@@ -1,0 +1,30 @@
+
+{
+  "project_info": {
+    "project_number": "510441403137",
+    "project_id": "wordpill-notifications",
+    "storage_bucket": "wordpill-notifications.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510441403137:android:8e4e76ff3abbdc2696e100",
+        "android_client_info": {
+          "package_name": "com.vocabflip.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNTI5OSz0BepZNw-gHY5mwZDq_aXm1kDs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
